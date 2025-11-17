@@ -5,7 +5,7 @@ use Cmd\Command;
 class CommandParser
 {
     private array $args;
-    private array $commands;
+    private array $commands = [];
 
     public function __construct()
     {
