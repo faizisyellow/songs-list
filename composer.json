@@ -1,0 +1,11 @@
+{
+  "name": "faizisyellow/songslists",
+  "description": "a command line to manage songs",
+  "autoload": {
+    "psr-4": {
+      "Faizisyellow\\Songslists\\": "src/",
+      "Packages\\CommandParser\\": "packages/command-parser/"
+    }
+  },
+  "require": {}
+}
