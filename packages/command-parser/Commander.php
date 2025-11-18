@@ -31,14 +31,10 @@ class Commander
     /**
      * default command when user run the application
      * without any commads/arguments.
-     * @param string $description The base description what the app is about
+     * @param DefaultCmd $dftcmd
      */
-    public function DefaultCmd(string $description, ?callable $run = null): void
+    public function DefaultCmd(DefaultCmd $dftcmd): void
     {
-        echo "$description\n";
-        if (isset($run)) {
-            // Todo: still considering should passed all args or not
-            $run($this->args);
-        }
+        $this->commands[] = $dftcmd;
     }
 }
