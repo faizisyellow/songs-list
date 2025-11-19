@@ -72,13 +72,13 @@ class Commander
         if (isset($defaultCmd)) {
             $msg = "{$defaultCmd->description}\n";
 
-            $msg .= "\nUsage:\n\t\n php {main file}.php [command]\n";
+            $msg .= "\nUsage:\n\n php {main file}.php [command]\n";
 
-            $msg .= "\nAvailable Commands:\n\t";
+            $msg .= "\nAvailable Commands:\n\n";
 
             if (count($this->commands) >= 1) {
                 foreach ($this->commands as $cmd) {
-                    $msg .= "{$cmd->use}";
+                    $msg .= " {$cmd->use}";
                 }
             } else {
                 $msg .=
