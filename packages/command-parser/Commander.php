@@ -81,8 +81,7 @@ class Commander
                     $msg .= " {$cmd->use}";
                 }
             } else {
-                $msg .=
-                    "\n you don't have any commands yet. please add commands.\n";
+                $msg .= "\n not have any commands yet.\n";
             }
 
             $this->DisplayMessage($msg);
