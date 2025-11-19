@@ -6,7 +6,11 @@ use InvalidArgumentException;
 class Commander
 {
     private array $args;
+
+    /** @var Command[] */
     private array $commands = [];
+
+    private DefaultCmd $defCommand;
 
     public function __construct()
     {
@@ -35,7 +39,7 @@ class Commander
      */
     public function DefaultCmd(DefaultCmd $dftcmd): void
     {
-        $this->commands[] = $dftcmd;
+        $this->defCommand = $dftcmd;
     }
 
     /**
@@ -46,11 +50,8 @@ class Commander
     public function Execute(): void
     {
         if (count($this->args) == 1) {
-            $defaultCmd = $this->GetDefaultCmd();
-
-            if (isset($defaultCmd)) {
-                $this->DisplayMessage($defaultCmd->description);
-            }
+            // Todo: make sure there's a default command
+            $this->RunDefaultCmd();
         }
     }
 
@@ -64,18 +65,27 @@ class Commander
         echo "$msg \n";
     }
 
-    /**
-     * GetDefaultCmd return DefaultCmd command.
-     * if not found return null
-     * @return DefaultCmd
-     * @return null
-     */
-    private function GetDefaultCmd(): ?DefaultCmd
+    private function RunDefaultCmd(): void
     {
-        foreach ($this->commands as $cmd) {
-            if ($cmd instanceof DefaultCmd) {
-                return $cmd;
+        $defaultCmd = $this->defCommand;
+
+        if (isset($defaultCmd)) {
+            $msg = "{$defaultCmd->description}\n";
+
+            $msg .= "\nUsage:\n\t\n php {main file}.php [command]\n";
+
+            $msg .= "\nAvailable Commands:\n\t";
+
+            if (count($this->commands) >= 1) {
+                foreach ($this->commands as $cmd) {
+                    $msg .= "{$cmd->use}";
+                }
+            } else {
+                $msg .=
+                    "\n you don't have any commands yet. please add commands.\n";
             }
+
+            $this->DisplayMessage($msg);
         }
     }
 }
