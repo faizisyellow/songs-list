@@ -37,4 +37,45 @@ class Commander
     {
         $this->commands[] = $dftcmd;
     }
+
+    /**
+     * Execute calls user-define function to run
+     * the application
+     * @return void
+     */
+    public function Execute(): void
+    {
+        if (count($this->args) == 1) {
+            $defaultCmd = $this->GetDefaultCmd();
+
+            if (isset($defaultCmd)) {
+                $this->DisplayMessage($defaultCmd->description);
+            }
+        }
+    }
+
+    /**
+     * DisplayMessage shows message to the command line.
+     * @param string $msg
+     * @return void
+     */
+    public function DisplayMessage(string $msg): void
+    {
+        echo "$msg \n";
+    }
+
+    /**
+     * GetDefaultCmd return DefaultCmd command.
+     * if not found return null
+     * @return DefaultCmd
+     * @return null
+     */
+    private function GetDefaultCmd(): ?DefaultCmd
+    {
+        foreach ($this->commands as $cmd) {
+            if ($cmd instanceof DefaultCmd) {
+                return $cmd;
+            }
+        }
+    }
 }
