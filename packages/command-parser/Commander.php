@@ -162,7 +162,7 @@ class Commander
      * @param string $msg
      * @return void
      */
-    public function DisplayMessage(string $msg): void
+    private function DisplayMessage(string $msg): void
     {
         echo "$msg \n";
     }
