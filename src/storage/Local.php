@@ -69,8 +69,62 @@ class Local implements storage
                 return $data;
         }
     }
-    public function Update(string $id, mixed $data): void {}
-    public function Delete(string $id): void {}
+    public function Update(string $id, mixed $data): void
+    {
+        if (!is_string($data)) {
+            throw new Exception("JSON storage only supports string data.");
+        }
+
+        $decodedData = $this->GetDataFromjson();
+
+        $foundData = false;
+
+        // character '&' let the loop references
+        // not a copy
+        foreach ($decodedData as &$item) {
+            if ($item["id"] === $id) {
+                $foundData = true;
+                $item["content"] = $data;
+                break;
+            }
+        }
+
+        unset($item);
+
+        if (!$foundData) {
+            throw new Exception("data with id: $id not found.");
+        }
+
+        $result = $this->WriteJsonToStore($decodedData);
+        if (is_bool($result)) {
+            throw new Exception("failed to update data with id: $id.");
+        }
+    }
+
+    public function Delete(string $id): void
+    {
+        $decodedData = $this->GetDataFromjson();
+
+        $foundData = false;
+        foreach ($decodedData as $key => $item) {
+            if ($item["id"] === $id) {
+                $foundData = true;
+                unset($decodedData[$key]);
+                break;
+            }
+        }
+
+        if (!$foundData) {
+            throw new Exception("data with id: $id not found.");
+        }
+
+        $clearData = array_values($decodedData);
+
+        $result = $this->WriteJsonToStore($clearData);
+        if (is_bool($result)) {
+            throw new Exception("failed to delete data with id: $id.");
+        }
+    }
 
     private function AddDataToJson(mixed $data): string
     {
@@ -86,11 +140,24 @@ class Local implements storage
             "content" => $data,
         ];
 
-        $store = fopen($this->filepath, "w");
-        fwrite($store, json_encode($decodedData, JSON_PRETTY_PRINT));
-        fclose($store);
+        $result = $this->WriteJsonToStore($decodedData);
+
+        // if return a boolean, it was error and return false
+        // because is_bool check it is bool type, it will return true.
+        if (is_bool($result)) {
+            throw new Exception("failed to add new data.");
+        }
 
         return $id;
+    }
+
+    private function WriteJsonToStore(array $data): int|bool
+    {
+        $store = fopen($this->filepath, "w");
+        $result = fwrite($store, json_encode($data, JSON_PRETTY_PRINT));
+        fclose($store);
+
+        return $result;
     }
 
     private function GetDataFromjson(): array
