@@ -73,7 +73,9 @@ class Commander
 
         if ($isFound) {
             $cmd = $this->GetCmdHandler($commandRequest);
-            $clearArgs = array_slice($this->args, 1);
+
+            // file name and command name will not included.
+            $clearArgs = array_slice($this->args, 2);
 
             $this->RunCmd($cmd, $clearArgs);
         } else {
