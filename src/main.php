@@ -7,4 +7,5 @@ use Packages\CommandParser\Commander;
 
 $app = new Commander();
 $app->DefaultCmd(DefaultCommand::build());
+$app->AddCmd(ListCommand::build());
 $app->Execute();
