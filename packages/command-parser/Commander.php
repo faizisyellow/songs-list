@@ -186,7 +186,7 @@ class Commander
 
             if (count($this->commands) >= 1) {
                 foreach ($this->commands as $cmd) {
-                    $msg .= " {$cmd->use}";
+                    $msg .= " {$cmd->use}\n";
                 }
             } else {
                 $msg .= "\n not have any commands yet.\n";
